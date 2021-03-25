@@ -5,14 +5,14 @@ import (
 	"database/sql"
 )
 
-type DBTX interface {
+type Executor interface {
 	QueryRowContext(ctx context.Context, query string, args ...interface{}) *sql.Row
 	QueryContext(ctx context.Context, query string, args ...interface{}) (*sql.Rows, error)
 	ExecContext(ctx context.Context, query string, args ...interface{}) (sql.Result, error)
 }
 
 // Int64 count or select only one int field
-func Int64(ctx context.Context, qu Querier, dt DBTX) (int64, error) {
+func Int64(ctx context.Context, qu Querier, dt Executor) (int64, error) {
 	sqlstr, args := qu.Query()
 	q, err := dt.QueryContext(ctx, sqlstr, args...)
 	if err != nil {
@@ -23,7 +23,7 @@ func Int64(ctx context.Context, qu Querier, dt DBTX) (int64, error) {
 }
 
 // Int64 count or select only one int field
-func Int64s(ctx context.Context, qu Querier, dt DBTX) ([]int64, error) {
+func Int64s(ctx context.Context, qu Querier, dt Executor) ([]int64, error) {
 	sqlstr, args := qu.Query()
 	q, err := dt.QueryContext(ctx, sqlstr, args...)
 	if err != nil {
@@ -38,7 +38,7 @@ func Int64s(ctx context.Context, qu Querier, dt DBTX) ([]int64, error) {
 }
 
 // Query FindRaw many record by raw sql
-func String(ctx context.Context, qu Querier, dt DBTX) (string, error) {
+func String(ctx context.Context, qu Querier, dt Executor) (string, error) {
 	sqlstr, args := qu.Query()
 	q, err := dt.QueryContext(ctx, sqlstr, args...)
 	if err != nil {
@@ -49,7 +49,7 @@ func String(ctx context.Context, qu Querier, dt DBTX) (string, error) {
 }
 
 // Query FindRaw many record by raw sql
-func Strings(ctx context.Context, qu Querier, dt DBTX) ([]string, error) {
+func Strings(ctx context.Context, qu Querier, dt Executor) ([]string, error) {
 	sqlstr, args := qu.Query()
 	q, err := dt.QueryContext(ctx, sqlstr, args...)
 	if err != nil {
